@@ -8,13 +8,16 @@ def main:
     arquivo = open(nomeArquivo, 'r')
 
     for line in arquivo.readLines():
-        # A primeira palavra de cada frase é enviada para o reconhecedor
+        # A primeira palavra de cada frase é enviada em lowercase para o reconhecedor
         # De acordo com o retorno do reconhecedor será decido qual ação tomar em seguida
         primeiraPalavra = line.split()[0]
-        retorno = reconhecer(primeiraPalavra)
+        retorno = reconhecer(primeiraPalavra.lower())
+        if retorno == 1:
+            reconhecerVar(line)
+        else if retorno == 2:
+            reconhecerWrite(line)
 
-
-# Função responsável por interpretar a frase
+# Função responsável por interpretar a primeira palavra da linha
 # 1.Reconhecer palavras-chaves/reservadas
 # 2.Reconhecer Strings
 # 3.Reconhecer variáveis
@@ -30,24 +33,42 @@ def reconhecer(palavra):
         return 4
     else if palavra == 'for':
         return 5
-    else if palavra[0] != "'" && palavra[0] != '"': #caso seja uma variavel já criada
+    else if palavra[0] != "'" and palavra[0] != '"': #caso seja uma variavel já criada
         return 6
     else: #Erro
         return 0
 
-def reconhecerWrite:
+def reconhecerVar(linha):
 
 
-def reconhecerRead:
+def reconhecerWrite(linha):
+    #Remove a palavra Write da frase
+    #Limpa espaços em branco no começo ou final da linha
+    linha = linha.replace('write', '', 1)
+    linha = linha.strip()
+    
+    #Verifica se abriu parenteses
+    if linha[0] == '(':
+        #verifica se abriu aspas simples ou duplas
+        linha = linha.replace('(','',1)
+        linha = linha.strip()
+
+        if (linha[0] == '"' or linha[0] == "'"):
+            
+            #Guardar texto em variável
+
+            #Verificar se fechou aspas simples ou duplas
+
+            #Verificar se fechou parenteses
 
 
-def reconhecerVar:
+def reconhecerRead(linha):
 
 
-def reconhecerIf:
+def reconhecerIf(linha):
 
 
-def reconhecerFor:
+def reconhecerFor(linha):
 
 
 # Função responsável por executar os comandos
