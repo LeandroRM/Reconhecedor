@@ -19,25 +19,22 @@ def reconhecer(palavra):
     else: #Erro
         return 0
 
-#def reconhecerVar(linha):
-
+def reconhecerVar(linha):
     linha = linha.replace('var', '', 1)
     linha = linha.strip()
 
     if (linha[0] == "'" or linha[0] == '"'):
         #Erro
-
-    else if (int(linha[0]) or float(linha[0])):
+    elif (int(linha[0]) or float(linha[0])):
         #Erro
-
     else:            
         nomeVar = line.split()[0]
         linha = linha.replace(nomeVar, '', 1)
         
         if (linha[0] != ';'):
             #Erro
-        else
-            print "variável declarada" nomeVar
+        else:
+            print ("variável declarada" + nomeVar)
 
 
 def reconhecerWrite(linha):
