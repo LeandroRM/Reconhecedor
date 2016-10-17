@@ -41,7 +41,7 @@ def reconhecer(palavra):
 def reconhecerVar(linha):
 
     linha = linha.replace('write', '', 1)
-    linha = linha.stlip()
+    linha = linha.strip()
 
     if (linha[0] == "'" or linha[0] == '"'):
         #Erro
@@ -53,7 +53,7 @@ def reconhecerWrite(linha):
     #Remove a palavra Write da frase
     #Limpa espaços em branco no começo ou final da linha
     linha = linha.replace('write', '', 1)
-    linha = linha.stlip()
+    linha = linha.strip()
     
     #Verifica se abriu parenteses
     if linha[0] == '(':
