@@ -1,21 +1,21 @@
 #Fluxo principal de código
-def main:
-    comandos = []
-    variaveis = []
+comandos = []
+#variaveis = []
 
-    nomeArquivo = input('Nome do arquivo: ')
+nomeArquivo = input('Nome do arquivo: ')
 
-    arquivo = open(nomeArquivo, 'r')
+arquivo = open(nomeArquivo, 'r')
 
-    for line in arquivo.readLines():
-        # A primeira palavra de cada frase é enviada em lowercase para o reconhecedor
-        # De acordo com o retorno do reconhecedor será decido qual ação tomar em seguida
-        primeiraPalavra = line.split()[0]
-        retorno = reconhecer(primeiraPalavra.lower())
-        if retorno == 1:
-            reconhecerVar(line)
-        else if retorno == 2:
-            reconhecerWrite(line)
+for line in arquivo.readLines():
+    # A primeira palavra de cada frase é enviada em lowercase para o reconhecedor
+    # De acordo com o retorno do reconhecedor será decido qual ação tomar em seguida
+    primeiraPalavra = line.split()[0]
+    retorno = reconhecer(primeiraPalavra.lower())
+
+    if retorno == 1:
+        reconhecerVar(line)
+    else if retorno == 2:
+        reconhecerWrite(line)
 
 # Função responsável por interpretar a primeira palavra da linha
 # 1.Reconhecer palavras-chaves/reservadas
@@ -63,7 +63,14 @@ def reconhecerWrite(linha):
 
 
 def reconhecerRead(linha):
-
+    #SEMPRE DAR STRIP()
+    #Remover a palavra Read da frase
+    #Verificar abertura de parenteses
+        #Verificar se nao tem aspas simples ou duplas
+            #verificar se nao começa com numero
+                #verificar se fechou parenteses
+                    #verificar se colocou ponto e virgula
+                        #adicionar ao vetor comandos
 
 def reconhecerIf(linha):
 
