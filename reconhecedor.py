@@ -1,3 +1,7 @@
+import sys
+
+numeroLinha = 1
+
 def isNumber(s):
     try:
         int(s)
@@ -12,6 +16,51 @@ def isVariavelValid(var):
         return False
     else:
         return True
+
+def getNumberOfLine():
+    global numeroLinha
+    return str(numeroLinha)
+
+def errorMsg(msg):
+    sys.exit(msg+" na linha: "+getNumberOfLine()) 
+
+def validateString(string):
+    if (string[0] == "'" or string[0] == '"'):            
+        #Verifica o fechamento da aspa
+        if(string[len(string) -1] == string[0]):    
+            string = string.replace(string[0], '', 2)
+            string = string.strip()                                    
+        else:        
+            errorMsg("Erro: esperado ( "+string[0]+" ) para fechar a string")
+
+    return string
+    
+def getVariavelType(var):
+
+    tipoVariavel = False
+
+    #Verifica se é string
+    if (var[0] == "'" or var[0] == '"'):                                            
+        validateString(var) #Valida a String
+        tipoVariavel = "STRING"
+
+    #Numeros 
+    elif var[0].isdigit():
+                    
+        #Float
+        if float(var):
+            tipoVariavel = "FLOAT"                               
+        #Inteiro
+        elif int(var):
+            tipoVariavel = "INTEGER"
+    #Boolean
+    elif (var == 'true' or var == 'false'):
+        tipoVariavel = "BOOLEAN"        
+
+    else:
+        errorMsg("Erro: inesperado ( "+var[0]+" )")
+
+    return tipoVariavel
 
 # Função responsável por interpretar a primeira palavra da linha
 # 1.Reconhecer palavras-chaves/reservadas
@@ -36,16 +85,46 @@ def reconhecer(palavra):
 
 def reconhecerVar(linha):
     linha = linha.replace('var', '', 1)
-    linha = linha.strip()
+    linha = linha.strip()    
 
     if (linha[len(linha) - 1] == ';'):
+        
         nomeVar = linha.split()[0]
         nomeVar = linha.split('=')[0]
+        
+        #Remove o ponto e virgula 
+        linha = linha.replace(';', '', 1)
+        linha = linha.strip()    
     
         if isVariavelValid(nomeVar):            
             linha = linha.replace(nomeVar, '', 1)
-            comandos.append('Declarou a variavel: ' + nomeVar)
+            linha = linha.strip()              
 
+            valorVariavel = None
+            tipoVariavel = None
+
+            if(linha[0] == "="):
+                linha = linha.replace("=", '', 1)
+                linha = linha.strip()
+
+                tipoVariavel = getVariavelType(linha)
+            
+                #Se for string vai remover as aspas
+                if(tipoVariavel == 'STRING'):
+                    valorVariavel = linha.replace(linha[0], '', 2).strip()
+                else:
+                    valorVariavel = linha                    
+            
+            if valorVariavel is not None:
+                comandos.append('Declarou a variavel: ' + nomeVar + ' com o tipo: ' + tipoVariavel +  ' valendo: ' + valorVariavel)
+            else:
+                comandos.append('Declarou a variavel: ' + nomeVar)    
+
+        else:
+            errorMsg("Erro: Nome de variável invalido: "+nomeVar)
+    else:
+        errorMsg("Experado ';' no final ")
+                                                 
 
 def reconhecerWrite(linha):
     #Remove a palavra Write da frase
@@ -107,13 +186,12 @@ comandos = []
 #variaveis = []
 
 #nomeArquivo = input('Nome do arquivo: ')
-
+ 
 nomeArquivo = 'testeWrite.txt'
 
 arquivo = open(nomeArquivo)
 
 #print(arquivo)
-
 with arquivo as info:
     for line in info.readlines():
 
@@ -129,5 +207,7 @@ with arquivo as info:
             reconhecerVar(line)
         elif retorno == 2:
             reconhecerWrite(line)
+        
+        numeroLinha = numeroLinha+1
 
 executar()

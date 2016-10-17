@@ -1,2 +1,8 @@
 write('Hello World');
-var teste;
+var StringDupla = "oi tudo bem";
+var StringSimples = 'oi tudo bem';
+var float = 13.542;
+var int = 10;
+var flag = true;
+var notflag = false;
+var somenteDeclara;
