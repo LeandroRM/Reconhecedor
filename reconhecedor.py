@@ -40,6 +40,14 @@ def reconhecer(palavra):
 
 def reconhecerVar(linha):
 
+    linha = linha.replace('write', '', 1)
+    linha = linha.strip()
+
+    if (linha[0] == "'" or linha[0] == '"'):
+        #Erro
+
+    else if (int(linha[0]) or float(linha[0])):
+        #Erro
 
 def reconhecerWrite(linha):
     #Remove a palavra Write da frase
