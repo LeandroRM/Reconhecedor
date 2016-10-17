@@ -1,3 +1,18 @@
+def isNumber(s):
+    try:
+        int(s)
+        return True
+    except ValueError:
+        return False
+
+def isVariavelValid(var):
+    if var[0] == "'" or var[0] == '"':
+        return False
+    elif isNumber(var[0]):
+        return False
+    else:
+        return True
+
 # Função responsável por interpretar a primeira palavra da linha
 # 1.Reconhecer palavras-chaves/reservadas
 # 2.Reconhecer Strings
@@ -23,18 +38,13 @@ def reconhecerVar(linha):
     linha = linha.replace('var', '', 1)
     linha = linha.strip()
 
-    if (linha[0] == "'" or linha[0] == '"'):
-        #Erro
-    elif (int(linha[0]) or float(linha[0])):
-        #Erro
-    else:            
-        nomeVar = line.split()[0]
-        linha = linha.replace(nomeVar, '', 1)
-        
-        if (linha[0] != ';'):
-            #Erro
-        else:
-            print ("variável declarada" + nomeVar)
+    if (linha[len(linha) - 1] == ';'):
+        nomeVar = linha.split()[0]
+        nomeVar = linha.split('=')[0]
+    
+        if isVariavelValid(nomeVar):            
+            linha = linha.replace(nomeVar, '', 1)
+            comandos.append('Declarou a variavel: ' + nomeVar)
 
 
 def reconhecerWrite(linha):
