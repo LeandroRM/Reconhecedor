@@ -62,6 +62,39 @@ def getVariavelType(var):
 
     return tipoVariavel
 
+def isEntreParenteses(linha):
+    if linha[0] == '(' and linha[len(linha) - 1] == ')':
+        return True
+    else:
+        return False
+
+#Verifica se uma condicao é valida
+def isCondicaoValida(condicao):
+    comparador = False
+    
+    if '==' in condicao:
+        comparador = '=='
+    elif '!=' in condicao:
+        comparador = '!='
+    elif '>' in condicao:
+        comparador = '>'
+    elif '<' in condicao:
+        comparador = '<'
+    elif '>=' in condicao:
+        comparador = '>='
+    elif '<=' in condicao:
+        comparador = '<='
+    
+    if comparador:
+        divideIf = condicao.split(comparador)
+        if len(divideIf) > 1:
+            return True
+    
+    return False
+
+    
+    
+
 # Função responsável por interpretar a primeira palavra da linha
 # 1.Reconhecer palavras-chaves/reservadas
 # 2.Reconhecer Strings
@@ -78,8 +111,10 @@ def reconhecer(palavra):
         return 4
     elif palavra == 'for':
         return 5
-    elif palavra[0] != "'" and palavra[0] != '"': #caso seja uma variavel já criada
+    elif palavra[0] == '}':
         return 6
+    elif palavra[0] != "'" and palavra[0] != '"': #caso seja uma variavel já criada
+        return 7
     else: #Erro
         return 0
 
@@ -129,8 +164,7 @@ def reconhecerVar(linha):
 def reconhecerWrite(linha):
     #Remove a palavra Write da frase
     #Limpa espaços em branco no começo ou final da linha
-    linha = linha.replace('write', '', 1)
-    linha = linha.strip()
+    linha = linha.replace('write', '', 1).strip()
 
     sTexto = "Erro no Write"
 
@@ -141,7 +175,7 @@ def reconhecerWrite(linha):
         linha = linha.strip()
 
         #Verifica se colocou os parenteses
-        if linha[0] == '(' and linha[len(linha) - 1] == ')':
+        if isEntreParenteses(linha):
             #Remove os parenteses
             linha = linha[1:len(linha) - 1]
             linha = linha.strip()
@@ -166,11 +200,44 @@ def reconhecerWrite(linha):
                     #verificar se colocou ponto e virgula
                         #adicionar ao vetor comandos
 
-#def reconhecerIf(linha):
+def reconhecerIf(linha):
+    #Remove a palavra if do começo
+    linha = linha.replace('if','',1).strip()
+    
+    if linha[len(linha) -1] == '{':
+        #Remove abertura de chaves
+        linha = linha[0:len(linha) - 1].strip()
+        
+        if  isEntreParenteses(linha):
+            #Remove parenteses
+            linha = linha[1:len(linha) - 1].strip()
+            
+            if isCondicaoValida(linha):
+                comandos.append('Iniciado bloco If com condicao = ' + linha)
+                fechamentos.append('If com condicao: ' + linha)
+                return True
+
+    comandos.append(errorMsg('Erro ao declarar if'))
+            
 
 
 #def reconhecerFor(linha):
 
+
+def reconhecerFechamento(linha):
+    if len(fechamentos) > 0:
+        comando = fechamentos[len(fechamentos) - 1]
+        
+        if 'else' in linha:
+            comandos.append('Else declarado para o ' + comando)
+            fechamentos[len(fechamentos) - 1] = 'Else declarado para o if ' + comando
+        else:
+            comandos.append('Fechamento declarado para o ' + comando)
+            #Remove o ultimo item
+            fechamentos.pop()
+    
+    else:
+        comandos.append(errorMsg('Erro ao declarar fechamento'))
 
 # Função responsável por executar os comandos
 # Interpretar a linha e executar o comando respectivo
@@ -182,12 +249,15 @@ def executar():
 
 
 #Fluxo principal de código
+#Guarda os comandos a serem executados
 comandos = []
-#variaveis = []
+#Guarda os blocos a serem fechados
+fechamentos = []
 
-#nomeArquivo = input('Nome do arquivo: ')
- 
-nomeArquivo = 'testeWrite.txt'
+nomeArquivo = input('Nome do arquivo(Não precisa por .txt): ')
+nomeArquivo += '.txt' 
+#nomeArquivo = 'testeWrite.txt'
+
 
 arquivo = open(nomeArquivo)
 
@@ -207,6 +277,10 @@ with arquivo as info:
             reconhecerVar(line)
         elif retorno == 2:
             reconhecerWrite(line)
+        elif retorno == 4:
+            reconhecerIf(line)
+        elif retorno == 6:
+            reconhecerFechamento(line)
         
         numeroLinha = numeroLinha+1
 
