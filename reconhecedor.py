@@ -221,8 +221,35 @@ def reconhecerIf(linha):
             
 
 
-#def reconhecerFor(linha):
+def reconhecerFor(linha):
+    #Remove a palavra for do começo
+    linha = linha.replace('for','',1).strip()
+    
+    #Verifica se abre chaves ao final da linha
+    if linha[len(linha) -1] == '{':
+        #Remove abertura de chaves
+        linha = linha[0:len(linha) - 1].strip()
+        
+        if  isEntreParenteses(linha):
+            #Remove parenteses
+            linha = linha[1:len(linha) - 1].strip()
+            
+            etapas = linha.split(';')
 
+            if (len(etapas) == 3):
+                #Etapa 1 -> declaracao da variavel
+                if '=' in etapas[0]:
+                    variavel = etapas[0].split('=')
+                    if isVariavelValid(variavel[0].strip()) and isNumber(variavel[1].strip()):
+                        #Verifica Etapa 2 -> Condicao
+                        if isCondicaoValida(etapas[1]):
+                            #verifica Etapa 3 -> Incremento
+                            if isNumber(etapas[2]):
+                                comandos.append('Iniciado bloco for')
+                                fechamentos.append('for')
+                                return True
+
+    comandos.append(errorMsg('Erro ao declarar for'))
 
 def reconhecerFechamento(linha):
     if len(fechamentos) > 0:
@@ -279,6 +306,8 @@ with arquivo as info:
             reconhecerWrite(line)
         elif retorno == 4:
             reconhecerIf(line)
+        elif retorno == 5:
+            reconhecerFor(line)
         elif retorno == 6:
             reconhecerFechamento(line)
         
