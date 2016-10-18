@@ -190,9 +190,26 @@ def reconhecerWrite(linha):
                 comandos.append('Utilizou write para escrever: "' + linha + '"') 
 
 
-#def reconhecerRead(linha):
-    #SEMPRE DAR STRIP()
+def reconhecerRead(linha):
     #Remover a palavra Read da frase
+    #Limpa espaços em branco no começo ou final da linha
+    linha = linha.replace('read', '', 1).strip()
+
+    #Verifica se utilizou ponto e virgula no final 
+    if linha[len(linha) - 1] == ';':
+        #Remove o ponto e virgula
+        linha = linha[0:len(linha) - 1].strip()
+
+        #Verifica se colocou os parenteses
+        if isEntreParenteses(linha):
+            #Remove os parenteses
+            linha = linha[1:len(linha) - 1].strip()
+
+            #Verifica se adicionou as aspas 
+            if isVariavelValid(linha):
+                comandos.append('Utilizou read para ler: ' + linha) 
+
+    
     #Verificar abertura de parenteses
         #Verificar se nao tem aspas simples ou duplas
             #verificar se nao começa com numero
@@ -304,6 +321,8 @@ with arquivo as info:
             reconhecerVar(line)
         elif retorno == 2:
             reconhecerWrite(line)
+        elif retorno == 3:
+            reconhecerRead(line)
         elif retorno == 4:
             reconhecerIf(line)
         elif retorno == 5:
