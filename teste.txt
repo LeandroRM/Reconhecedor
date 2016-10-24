@@ -1,0 +1,8 @@
+var x = 2;
+write("Informe um número");
+read(x);
+if (x > 1) {
+    for (var i = 0; i < 10; 1) {
+        write("Teste");
+    }
+}

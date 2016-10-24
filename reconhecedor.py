@@ -188,6 +188,12 @@ def reconhecerWrite(linha):
 
                 #Guardar texto em variável
                 comandos.append('Utilizou write para escrever: "' + linha + '"') 
+            else:
+                errorMsg("Erro: Não utilizou aspas")
+        else:
+            errorMsg("Erro: Não utilizou parênteses")
+    else:
+        errorMsg("Erro: esperado ';' no final")
 
 
 def reconhecerRead(linha):
@@ -207,7 +213,13 @@ def reconhecerRead(linha):
 
             #Verifica se adicionou as aspas 
             if isVariavelValid(linha):
-                comandos.append('Utilizou read para ler: ' + linha) 
+                comandos.append('Utilizou read para ler: ' + linha)
+            else:
+                errorMsg("Erro: Variável inválida")
+        else:
+            errorMsg("Erro: Não declarou parenteses")
+    else:
+        errorMsg("Erro: ';' esperado") 
 
     
     #Verificar abertura de parenteses
@@ -234,7 +246,7 @@ def reconhecerIf(linha):
                 fechamentos.append('If com condicao: ' + linha)
                 return True
 
-    comandos.append(errorMsg('Erro ao declarar if'))
+    errorMsg('Erro ao declarar if')
             
 
 
@@ -266,7 +278,7 @@ def reconhecerFor(linha):
                                 fechamentos.append('for')
                                 return True
 
-    comandos.append(errorMsg('Erro ao declarar for'))
+    errorMsg('Erro ao declarar for')
 
 def reconhecerFechamento(linha):
     if len(fechamentos) > 0:
@@ -281,7 +293,7 @@ def reconhecerFechamento(linha):
             fechamentos.pop()
     
     else:
-        comandos.append(errorMsg('Erro ao declarar fechamento'))
+        errorMsg('Erro ao declarar fechamento')
 
 # Função responsável por executar os comandos
 # Interpretar a linha e executar o comando respectivo
