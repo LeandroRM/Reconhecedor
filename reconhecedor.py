@@ -1,3 +1,5 @@
+# coding=UTF-8
+
 import sys
 
 numeroLinha = 1
@@ -310,10 +312,8 @@ comandos = []
 #Guarda os blocos a serem fechados
 fechamentos = []
 
-nomeArquivo = input('Nome do arquivo(Não precisa por .txt): ')
-nomeArquivo += '.txt' 
-#nomeArquivo = 'testeWrite.txt'
-
+nomeArquivo = raw_input('Nome do arquivo(Não precisa por .txt): ')
+nomeArquivo += '.txt'
 
 arquivo = open(nomeArquivo)
 
