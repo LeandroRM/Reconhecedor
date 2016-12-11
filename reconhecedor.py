@@ -153,7 +153,7 @@ def reconhecerVar(linha):
                     valorVariavel = linha                    
             
             if valorVariavel is not None:
-                comandos.append('Declarou a variavel: ' + nomeVar + ' com o tipo: ' + tipoVariavel +  ' valendo: ' + valorVariavel)
+                comandos.append('Declarou a variavel: ' + nomeVar + ' com o tipo: ' + tipoVariavel +  ' e o valor: ' + valorVariavel)
             else:
                 comandos.append('Declarou a variavel: ' + nomeVar)    
 
@@ -244,7 +244,7 @@ def reconhecerIf(linha):
             linha = linha[1:len(linha) - 1].strip()
             
             if isCondicaoValida(linha):
-                comandos.append('Iniciado bloco If com condicao = ' + linha)
+                comandos.append('Iniciado bloco If com condicao: ' + linha)
                 fechamentos.append('If com condicao: ' + linha)
                 return True
 
@@ -274,10 +274,11 @@ def reconhecerFor(linha):
                     if isVariavelValid(variavel[0].strip()) and isNumber(variavel[1].strip()):
                         #Verifica Etapa 2 -> Condicao
                         if isCondicaoValida(etapas[1]):
+                            condicao = etapas[1].strip()
                             #verifica Etapa 3 -> Incremento
                             if isNumber(etapas[2]):
-                                comandos.append('Iniciado bloco for')
-                                fechamentos.append('for')
+                                comandos.append('Iniciado bloco for com condicao: ' + condicao + ' e acrescendo em ' + etapas[2].strip() + ' por repetição')
+                                fechamentos.append('for com condicao: ' + condicao)
                                 return True
 
     errorMsg('Erro ao declarar for')
